@@ -1,0 +1,42 @@
+# Copy is created by `python cg_agent.py init` (with random topics + secret filled in).
+base_url: https://groups.gsb.columbia.edu
+state_dir: ~/.cg-agent            # session cookies, sqlite state, screenshots
+scan_interval_minutes: 10         # keep >= 5; this is a shared school system
+max_pages: 12                     # times to click "More" on /events (~26 events per page)
+
+ntfy:
+  server: https://ntfy.sh
+  alert_topic: cg-alerts-635b337a1ec2     # subscribe to this in the ntfy phone app
+  approve_topic: cg-approve-33fcce718da7f3d2  # the "Register" button posts here; do not subscribe
+  token: ""                           # optional ntfy access token if you reserve the topics
+
+approval_secret: 8e010c7ec8c078fd46f4b65560bc49be46f86b4a08220970          # signs approve buttons so a stranger can't trigger registrations
+
+registration:
+  dry_run: false      # START HERE. Fills the form + screenshots, but never clicks Register.
+  quantity: 1
+
+filters:
+  only_registrable: true           # skip events that only show "View"
+  exclude_groups:                  # regex, case-insensitive, matched against the hosting group
+    - "Executive Education"
+    - "^EMBA"
+    - "Alumni Events"
+    - "Development and Alumni"
+    - "Admissions"
+    - "^All (EMBA|MSFE|MSAA|MSLD|MSMK|PhD|J-Term)"
+    # - "^MBA Cluster (?!B 27)"    # uncomment and put YOUR cluster to hide other clusters' events
+  exclude_keywords: []             # regex against the title, e.g. "Store", "Tea Order"
+  watch_keywords:                  # matches get a high-priority (sound) push and a * in the title
+    - "Greater China"
+    - "Green Business"
+    - "\\bclimate\\b"
+    - "aviation|airline|aerospace"
+    - "hik(e|ing)|Outdoors Club"
+    - "Management Consulting|\\bconsult"
+    - "Real Estate|architect"
+    - "\\bAI\\b|Artificial Intelligence"
+    - "Student Government"
+  watch_priority: 4                # ntfy 1-5
+  normal_priority: 2               # 2 = silent, sits in the notification list
+  max_pushes_per_scan: 10          # the rest go into one digest push
