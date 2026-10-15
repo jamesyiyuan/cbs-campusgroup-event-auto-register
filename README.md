@@ -1,0 +1,1 @@
+# cbs-campusgroup-event-auto-register
